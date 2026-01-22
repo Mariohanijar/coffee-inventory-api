@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
+#useCases
 use App\UseCases\CreateProductUseCase;
 use App\UseCases\DeleteProductUseCase;
 use App\UseCases\ReadProductUseCase;
 use App\UseCases\ReadAllProductsUseCase;
 use App\UseCases\ReadProductsByCategoryUseCase;
+use App\UseCases\UpdateProductUseCase;
+
 use App\Http\Controllers\Controller;
 
 class ProductController extends Controller
@@ -55,9 +59,22 @@ class ProductController extends Controller
     }
 
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, UpdateProductUseCase $useCase)
     {
-        //
+        $validated = $request->validate([
+        'id'       => 'required|exists:products,id',
+        'name'     => 'string|max:100',
+        'category' => 'string',
+        'price'    => 'numeric|min:0',
+        'quantity' => 'integer|min:0',
+        ]);
+
+        $product = $useCase->execute($validated);
+
+        return response()->json([
+        'message' => 'Product updated with success',
+        'product' => $product
+        ]);
     }
 
     public function destroy(string $name, DeleteProductUseCase $useCase)
@@ -65,7 +82,7 @@ class ProductController extends Controller
        $deletedProduct = $useCase->execute($name);
 
         return response()->json([
-            'message' => 'Produto removido com sucesso!',
+            'message' => 'Product deleted with success',
             'product' => $deletedProduct
         ], 200);
     }

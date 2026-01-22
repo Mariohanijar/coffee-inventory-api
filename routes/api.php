@@ -9,3 +9,4 @@ Route::get('/products/search/name/{name}', [ProductController::class, 'showByNam
 Route::delete('/products/{name}', [ProductController::class, 'destroy']);
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/search/category/{category}', [ProductController::class, 'showByCategory']);
+Route::put('/products', [ProductController::class, 'update']);
