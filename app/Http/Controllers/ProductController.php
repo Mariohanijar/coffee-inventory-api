@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\UseCases\CreateProductUseCase;
 use App\UseCases\DeleteProductUseCase;
 use App\UseCases\ReadProductUseCase;
+use App\UseCases\ReadAllProductsUseCase;
+use App\UseCases\ReadProductsByCategoryUseCase;
 use App\Http\Controllers\Controller;
 
 class ProductController extends Controller
@@ -13,9 +15,11 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(ReadAllProductsUseCase $useCase)
     {
-        //
+        $products = $useCase->execute();
+
+        return response()->json($products, 200);
     }
 
 
@@ -41,6 +45,13 @@ class ProductController extends Controller
         }
 
         return response()->json($product);
+    }
+
+    public function showByCategory(string $category, ReadProductsByCategoryUseCase $useCase)
+    {
+       $products = $useCase->execute($category);
+
+        return response()->json($products, 200);
     }
 
 
