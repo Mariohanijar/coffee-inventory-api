@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\UseCases\CreateProductUseCase;
+use App\UseCases\DeleteProductUseCase;
+use App\UseCases\ReadProductUseCase;
 use App\Http\Controllers\Controller;
 
 class ProductController extends Controller
@@ -16,9 +18,7 @@ class ProductController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request, CreateProductUseCase $useCase)
     {
        $validated = $request->validate([
@@ -32,27 +32,30 @@ class ProductController extends Controller
         return response()->json($product, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function showByName(string $name, ReadProductUseCase $useCase)
     {
-        //
+       $product = $useCase->execute($name);
+
+        if (!$product) {
+            return response()->json(['message' => 'Café não encontrado'], 404);
+        }
+
+        return response()->json($product);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(Request $request, string $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(string $name, DeleteProductUseCase $useCase)
     {
-        //
+       $deletedProduct = $useCase->execute($name);
+
+        return response()->json([
+            'message' => 'Produto removido com sucesso!',
+            'product' => $deletedProduct
+        ], 200);
     }
 }
