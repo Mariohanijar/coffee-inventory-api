@@ -29,14 +29,14 @@ class ProductController extends Controller
         path: "/api/products",
         summary: "List all products",
         description: "Returns a list of all products available in the inventory",
-        tags: ["Products"],
+        tags: ["Products (Read)"],
         responses: [
             new OA\Response(
                 response: 200,
                 description: "Successful operation",
                 content: new OA\JsonContent(
                     type: "array",
-                    items: new OA\Items(ref: "#/components/schemas/Product")
+                    items: new OA\Items(ref: "#/components/schemas/ProductResponse")
                 )
             )
         ]
@@ -49,28 +49,33 @@ class ProductController extends Controller
     }
 
 
-    #[OA\Post(
+     #[OA\Post(
         path: "/api/products",
         summary: "Create a new product",
         description: "Creates a new product in the inventory",
-        tags: ["Products"],
+        tags: ["Products (Write)"],
         requestBody: new OA\RequestBody(
             required: true,
             content: [
-                "application/json" => new OA\JsonContent(
-                    ref: "#/components/schemas/Product"
-                )
+                "application/json" => new OA\JsonContent(ref: "#/components/schemas/ProductRequest")
             ]
         ),
         responses: [
             new OA\Response(
                 response: 201,
                 description: "Product created successfully",
-                content: new OA\JsonContent(ref: "#/components/schemas/Product")
+                content: new OA\JsonContent(ref: "#/components/schemas/ProductResponse")
             ),
             new OA\Response(
                 response: 422,
-                description: "Validation error"
+                description: "Validation error",
+                content: new OA\JsonContent(
+                    type: "object",
+                    properties: [
+                        new OA\Property(property: "message", type: "string", example: "The name field is required."),
+                        new OA\Property(property: "errors", type: "object")
+                    ]
+                )
             )
         ]
     )]
@@ -87,17 +92,17 @@ class ProductController extends Controller
         return response()->json($product, 201);
     }
 
-    #[OA\Get(
+     #[OA\Get(
         path: "/api/products/search/name/{name}",
-        summary: "Get product by name",
+        summary: "Get a product by name",
         description: "Returns a product that matches the given name",
-        tags: ["Products"],
+        tags: ["Products (Read)"],
         parameters: [
             new OA\Parameter(
                 name: "name",
                 in: "path",
                 required: true,
-                description: "Name of the product to search",
+                description: "The name of the product to search",
                 schema: new OA\Schema(type: "string")
             )
         ],
@@ -105,11 +110,17 @@ class ProductController extends Controller
             new OA\Response(
                 response: 200,
                 description: "Product found",
-                content: new OA\JsonContent(ref: "#/components/schemas/Product")
+                content: new OA\JsonContent(ref: "#/components/schemas/ProductResponse")
             ),
             new OA\Response(
                 response: 404,
-                description: "Product not found"
+                description: "Product not found",
+                content: new OA\JsonContent(
+                    type: "object",
+                    properties: [
+                        new OA\Property(property: "message", type: "string", example: "Product not found")
+                    ]
+                )
             )
         ]
     )]
@@ -124,11 +135,11 @@ class ProductController extends Controller
         return response()->json($product);
     }
 
-     #[OA\Get(
+      #[OA\Get(
         path: "/api/products/search/category/{category}",
         summary: "Get products by category",
-        description: "Returns all products that belong to a specific category",
-        tags: ["Products"],
+        description: "Returns all products belonging to a specific category",
+        tags: ["Products (Read)"],
         parameters: [
             new OA\Parameter(
                 name: "category",
@@ -144,7 +155,7 @@ class ProductController extends Controller
                 description: "Successful operation",
                 content: new OA\JsonContent(
                     type: "array",
-                    items: new OA\Items(ref: "#/components/schemas/Product")
+                    items: new OA\Items(ref: "#/components/schemas/ProductResponse")
                 )
             )
         ]
@@ -160,21 +171,19 @@ class ProductController extends Controller
      #[OA\Put(
         path: "/api/products",
         summary: "Update a product",
-        description: "Updates an existing product in the inventory",
-        tags: ["Products"],
+        description: "Updates an existing product in the inventory. **Note:** You must include the `id` of the product you want to update.",
+        tags: ["Products (Write)"],
         requestBody: new OA\RequestBody(
             required: true,
             content: [
-                "application/json" => new OA\JsonContent(
-                    ref: "#/components/schemas/Product"
-                )
+                "application/json" => new OA\JsonContent(ref: "#/components/schemas/ProductRequest")
             ]
         ),
         responses: [
             new OA\Response(
                 response: 200,
                 description: "Product updated successfully",
-                content: new OA\JsonContent(ref: "#/components/schemas/Product")
+                content: new OA\JsonContent(ref: "#/components/schemas/ProductResponse")
             ),
             new OA\Response(
                 response: 422,
@@ -182,7 +191,13 @@ class ProductController extends Controller
             ),
             new OA\Response(
                 response: 404,
-                description: "Product not found"
+                description: "Product not found",
+                content: new OA\JsonContent(
+                    type: "object",
+                    properties: [
+                        new OA\Property(property: "message", type: "string", example: "Product not found")
+                    ]
+                )
             )
         ]
     )]
@@ -208,7 +223,7 @@ class ProductController extends Controller
         path: "/api/products/{name}",
         summary: "Delete a product by name",
         description: "Deletes the product with the specified name from the inventory",
-        tags: ["Products"],
+        tags: ["Products (Write)"],
         parameters: [
             new OA\Parameter(
                 name: "name",
@@ -222,11 +237,17 @@ class ProductController extends Controller
             new OA\Response(
                 response: 200,
                 description: "Product deleted successfully",
-                content: new OA\JsonContent(ref: "#/components/schemas/Product")
+                content: new OA\JsonContent(ref: "#/components/schemas/ProductResponse")
             ),
             new OA\Response(
                 response: 404,
-                description: "Product not found"
+                description: "Product not found",
+                content: new OA\JsonContent(
+                    type: "object",
+                    properties: [
+                        new OA\Property(property: "message", type: "string", example: "Product not found")
+                    ]
+                )
             )
         ]
     )]
