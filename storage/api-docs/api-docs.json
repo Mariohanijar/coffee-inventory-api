@@ -7,8 +7,8 @@
     },
     "servers": [
         {
-            "url": "http://brew-control.test",
-            "description": "Local development server"
+            "url": "http://localhost:8000",
+            "description": "Docker Development Server"
         }
     ],
     "paths": {

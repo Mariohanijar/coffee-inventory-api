@@ -10,8 +10,8 @@ use OpenApi\Attributes as OA;
     description: "REST API for managing coffee shop inventory, products and stock levels."
 )]
 #[OA\Server(
-    url: "http://brew-control.test",
-    description: "Local development server"
+    url: "http://localhost:8000",
+    description: "Docker Development Server"
 )]
 class OpenApiSpec
 {

@@ -6,21 +6,12 @@ services:
       - "8000:8000"
     volumes:
       - .:/var/www
-    command: >
-      sh -c "if [ ! -f .env ]; then cp .env.example .env; fi &&
-             composer install &&
-             php artisan key:generate --ansi &&
-             php artisan migrate --force &&
-             php artisan l5-swagger:generate &&
-             php artisan serve --host=0.0.0.0 --port=8000"
     depends_on:
       - db
 
   db:
     image: postgres:15
     container_name: coffee_db
-    ports:
-      - "5432:5432"
     environment:
       POSTGRES_DB: coffee_inventory
       POSTGRES_USER: postgres
