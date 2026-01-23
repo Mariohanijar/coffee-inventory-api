@@ -1,19 +1,18 @@
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     container_name: coffee_app
     ports:
       - "8000:8000"
     volumes:
       - .:/var/www
-    environment:
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_DATABASE=coffee_inventory
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=password
+    command: >
+      sh -c "if [ ! -f .env ]; then cp .env.example .env; fi &&
+             composer install &&
+             php artisan key:generate --ansi &&
+             php artisan migrate --force &&
+             php artisan l5-swagger:generate &&
+             php artisan serve --host=0.0.0.0 --port=8000"
     depends_on:
       - db
 
