@@ -15,6 +15,11 @@ use App\UseCases\UpdateProductUseCase;
 use App\Http\Controllers\Controller;
 use OpenApi\Attributes as OA;
 
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
+
+use App\Http\Resources\ProductResource;
+
 #[OA\Tag(
     name: "Products",
     description: "Endpoints for managing products in the coffee inventory"
@@ -45,7 +50,7 @@ class ProductController extends Controller
     {
         $products = $useCase->execute();
 
-        return response()->json($products, 200);
+        return ProductResource::collection($products);
     }
 
 
@@ -79,17 +84,11 @@ class ProductController extends Controller
             )
         ]
     )]
-    public function store(Request $request, CreateProductUseCase $useCase)
+    public function store(StoreProductRequest $request, CreateProductUseCase $useCase)
     {
-        $validated = $request->validate([
-            'name'     => 'required|unique:products|max:100',
-            'category' => 'required|string',
-            'price'    => 'required|numeric|min:0|max:130',
-            'quantity' => 'required|integer|min:0',
-        ]);
-        $product = $useCase->execute($validated);
+        $product = $useCase->execute($request->validated());
 
-        return response()->json($product, 201);
+        return new ProductResource($product);
     }
 
      #[OA\Get(
@@ -201,22 +200,11 @@ class ProductController extends Controller
             )
         ]
     )]
-    public function update(Request $request, UpdateProductUseCase $useCase)
+    public function update(UpdateProductRequest $request, UpdateProductUseCase $useCase)
     {
-        $validated = $request->validate([
-            'id'       => 'required|exists:products,id',
-            'name'     => 'string|max:100',
-            'category' => 'string',
-            'price'    => 'numeric|min:0',
-            'quantity' => 'integer|min:0',
-        ]);
+        $product = $useCase->execute($request->validated());
 
-        $product = $useCase->execute($validated);
-
-        return response()->json([
-            'message' => 'Product updated with success',
-            'product' => $product
-        ]);
+        return new ProductResource($product);
     }
 
     #[OA\Delete(
