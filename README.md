@@ -12,7 +12,8 @@ A aplicação permite o controle eficiente de produtos, categorias e operações
 
 ### 1. Clone the repository
 ```bash
-git clone "https://github.com/Mariohanijar/CoffeStockApi.git](https://github.com/Mariohanijar/coffee-inventory-api.git"
+git clone "https://github.com/Mariohanijar/coffee-inventory-api.git"
+
 cd coffee-inventory-api
 ```
 ### 2. Configurar Variáveis de Ambiente
