@@ -43,7 +43,7 @@ URL: http://localhost:8000/api/documentation
 
 ## Solução de Problemas
 
-### Ao docker compose exec app composer install
+### Ao tentar dar o comando: docker compose exec app composer install
 Dê o comando 
 ```bash
 docker compose down
