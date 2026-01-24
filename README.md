@@ -44,6 +44,18 @@ Após subir os containers, você pode acessar a interface do Swagger para testar
 URL: http://localhost:8000/api/documentation
 
 ## Solução de Problemas
+
+### Ao tentar dar docker compose up -d --build, dá erro
+Dê o comando 
+```bash
+docker compose down
+```
+Depois novamente rode o comando 
+```bash
+docker compose up
+```
+a partir daí siga novamente o passo a passo
+
 ### Se ao tentar criar um produto (POST) você receber um erro de servidor informando que classes de validação não foram encontradas, as dependências podem estar incompletas no container. Resolva com:
 ```bash
 docker compose exec app composer install --optimize-autoloader
