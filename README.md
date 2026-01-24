@@ -10,11 +10,9 @@ A aplicação permite o controle eficiente de produtos, categorias e operações
 
 ## Como Iniciar (Ambiente Docker)
 
-### 1. Clone the repository
+### 1. Clonar repositório
 ```bash
 git clone "https://github.com/Mariohanijar/coffee-inventory-api.git"
-
-cd coffee-inventory-api
 ```
 ### 2. Configurar Variáveis de Ambiente
 ```bash
@@ -45,7 +43,7 @@ URL: http://localhost:8000/api/documentation
 
 ## Solução de Problemas
 
-### Ao tentar dar docker compose up -d --build, dá erro
+### Ao docker compose exec app composer install
 Dê o comando 
 ```bash
 docker compose down
